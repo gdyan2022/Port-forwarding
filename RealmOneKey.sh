@@ -45,7 +45,8 @@ deploy_realm() {
     tar -xvf realm.tar.gz
     chmod +x realm
     # 创建服务文件
-    echo "[Unit]
+    cat > /etc/systemd/system/realm.service << EOF
+    [Unit]
 Description=realm
 After=network-online.target
 Wants=network-online.target systemd-networkd-wait-online.service
@@ -73,7 +74,8 @@ uninstall_realm() {
 }
 
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/system/realm.service
+WantedBy=multi-user.target
+EOF
     systemctl daemon-reload
     # 更新realm状态变量
     realm_status="已安装"
